@@ -3,9 +3,7 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Kad Raya Fikrie &amp; Wana</title><!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script><!-- Google Fonts: Fredoka untuk vibe comel -->
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&amp;display=swap" rel="stylesheet">
+  <title>Kad Raya Fikrie &amp; Wana</title><script src="https://cdn.tailwindcss.com"></script><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&amp;display=swap" rel="stylesheet">
   <style>
         body {
             font-family: 'Fredoka', sans-serif;
@@ -246,24 +244,25 @@
   <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
  </head>
  <body>
-  <div class="mobile-container"><!-- === AUDIO ELEMENTS === --> <!-- 1. Lagu Raya (Google Drive Link) -->
-   <audio id="rayaSong" loop preload="auto"><source src="https://drive.google.com/uc?export=download&amp;id=1e6q0ylnQKcKP_4GplX2lf3Tic9oDDkNk" type="audio/mpeg">
-   </audio><!-- 2. SFX: Butang Click -->
+  <div class="mobile-container">
+   <audio id="rayaSong" loop autoplay preload="auto"><source src="https://drive.google.com/uc?export=download&amp;id=1e6q0ylnQKcKP_4GplX2lf3Tic9oDDkNk" type="audio/mpeg">
+   </audio>
    <audio id="sfxClick" preload="auto"><source src="https://assets.mixkit.co/sfx/preview/mixkit-modern-technology-select-3124.mp3" type="audio/mpeg">
-   </audio><!-- 3. SFX: Sampul Buka -->
+   </audio>
    <audio id="sfxOpen" preload="auto"><source src="https://assets.mixkit.co/sfx/preview/mixkit-paper-slide-1530.mp3" type="audio/mpeg">
-   </audio><!-- Background Decor -->
+   </audio>
+   
    <div class="pattern-bg"></div>
    <div id="stars-container"></div>
    <div class="absolute top-10 right-8 text-yellow-300 text-6xl float opacity-80 z-0">
     🌙
-   </div><!-- === SKRIN 0: INTRO PAGE (New) === -->
+   </div>
+   
    <div id="intro-screen" class="screen z-40 cursor-pointer intro-clickable" onclick="goToLanding()">
     <div class="mb-6 pulse-attention relative">
      <div class="mini-envelope">
       💌
-     </div><!-- Sparkles -->
-     <div class="absolute -top-2 -right-4 text-2xl animate-pulse">
+     </div><div class="absolute -top-2 -right-4 text-2xl animate-pulse">
       ✨
      </div>
      <div class="absolute -bottom-2 -left-4 text-xl animate-pulse" style="animation-delay: 0.5s">
@@ -276,13 +275,13 @@
      <div class="w-8 h-8 rounded-full border-2 border-green-200 flex items-center justify-center"><span class="text-green-200 text-xl">👇</span>
      </div>
     </div>
-   </div><!-- === SKRIN 1: LANDING PAGE (Detail Pengirim) === -->
+   </div>
+   
    <div id="landing-screen" class="screen hidden-screen z-30">
     <div class="text-center mb-8 relative z-10">
      <h1 class="text-white text-3xl font-bold mb-2 drop-shadow-md">Kiriman Raya</h1>
      <p class="text-green-100 text-sm">Istimewa dari hati ❤️</p>
-    </div><!-- Sampul Surat Besar -->
-    <div class="envelope-container mb-10 float" onclick="openEnvelope()">
+    </div><div class="envelope-container mb-10 float" onclick="openEnvelope()">
      <div class="envelope-flap" id="flap"></div>
      <div class="envelope-paper"><span class="text-emerald-600 text-3xl">❤️</span>
      </div>
@@ -292,8 +291,7 @@
       </div>
      </div>
      <div class="ketupat" style="right: -10px; top: 80px; transform: rotate(15deg) scale(0.6);"></div>
-    </div><!-- NAMA DISPLAY -->
-    <div class="w-full max-w-xs space-y-4 mb-10 relative z-30 px-4">
+    </div><div class="w-full max-w-xs space-y-4 mb-10 relative z-30 px-4">
      <div class="name-tag"><span class="text-green-100 text-xs block mb-1 opacity-80 uppercase tracking-widest">Daripada</span>
       <div class="text-2xl font-bold bounce-name">
        Fikrie
@@ -305,7 +303,8 @@
       </div>
      </div>
     </div><button onclick="openEnvelope()" class="btn-raya text-lg shadow-lg relative z-30 hover:bg-green-50"> Baca Surat Sekarang </button>
-   </div><!-- === SKRIN 2: KAD UCAPAN (Isi Surat) === -->
+   </div>
+   
    <div id="card-screen" class="screen hidden-screen z-20 bg-black/20 backdrop-blur-sm">
     <div class="absolute top-0 left-6 w-1 h-32 bg-yellow-300/50">
      <div class="ketupat" style="bottom: -20px; left: -18px; border-color: white;"></div>
@@ -329,7 +328,8 @@
     </div>
     <div id="fireworks" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
    </div>
-  </div><!-- JAVASCRIPT LOGIC -->
+  </div>
+  
   <script>
         // 1. Generate Stars
         const starsContainer = document.getElementById('stars-container');
@@ -357,12 +357,26 @@
         sfxClick.volume = 0.8; 
         sfxOpen.volume = 1.0; 
 
+        // --- NEW: AUTO PLAY LOGIC ---
+        // Cuba play lagu sebaik sahaja page load
+        window.addEventListener('DOMContentLoaded', () => {
+             // Cuba play direct
+             const playPromise = audio.play();
+             
+             if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    // Jika browser block, kita tunggu user click mana-mana untuk play
+                    console.log("Autoplay blocked. Waiting for interaction.");
+                    document.addEventListener('click', () => {
+                        audio.play();
+                    }, { once: true }); // Hanya jalan sekali
+                });
+             }
+        });
+
         function playMusic() {
-            if(audio.readyState >= 2) {
-                 audio.play().catch(e => console.log("Lagu tak dapat play:", e));
-            } else {
-                audio.load(); 
-                audio.play().catch(e => console.log("Lagu tak dapat play:", e));
+            if(audio.paused) {
+                audio.play().catch(e => console.log("Audio play error:", e));
             }
         }
 
@@ -379,8 +393,8 @@
 
         // 3. New Logic: Intro Screen -> Landing Screen
         function goToLanding() {
-            // Trigger Audio on first interaction!
             playSFX('click');
+            // Backup call in case autoplay failed earlier
             playMusic();
 
             const intro = document.getElementById('intro-screen');
@@ -479,5 +493,5 @@
             }
         }
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c5e4b2592e5068e',t:'MTc2OTc0ODA1MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ </body>
 </html>
