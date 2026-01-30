@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="ms">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Kad Raya Fikrie &amp; Wana</title><!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script><!-- Google Fonts: Fredoka untuk vibe comel -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&amp;display=swap" rel="stylesheet">
+  <style>
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background-color: #111;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* Container Mobile */
+        .mobile-container {
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            max-height: 850px;
+            position: relative;
+            background: linear-gradient(180deg, #064e3b 0%, #10b981 100%);
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        /* Stars Animation */
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: twinkle 2s infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.5); opacity: 1; }
+        }
+
+        /* Floating Animation (Sampul & Objek) */
+        .float {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Pulse Animation untuk butang tekan */
+        .pulse-attention {
+            animation: pulse-scale 1.5s infinite;
+        }
+        
+        @keyframes pulse-scale {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Name Bounce Animation */
+        .bounce-name {
+            display: inline-block;
+            animation: bounce-text 2s ease-in-out infinite;
+            color: #fcd34d;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .bounce-name.delay {
+            animation-delay: 1s;
+        }
+
+        @keyframes bounce-text {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px) scale(1.05); }
+        }
+
+        /* Envelope CSS Art (Main Envelope) */
+        .envelope-container {
+            position: relative;
+            width: 220px;
+            height: 150px;
+            margin: 0 auto;
+            cursor: pointer;
+            transition: transform 0.3s;
+            z-index: 30;
+        }
+        .envelope-container:active { transform: scale(0.95); }
+
+        .envelope-body {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fbbf24;
+            border-radius: 10px;
+            z-index: 10;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            width: 0; height: 0; 
+            border-left: 110px solid transparent;
+            border-right: 110px solid transparent;
+            border-top: 90px solid #f59e0b;
+            z-index: 11;
+            transform-origin: top;
+            transition: transform 0.6s ease-in-out, z-index 0.6s;
+        }
+
+        .envelope-open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 5;
+        }
+
+        .envelope-paper {
+            position: absolute;
+            bottom: 0; left: 10px;
+            width: 200px; height: 130px;
+            background: #fff;
+            z-index: 6;
+            border-radius: 5px;
+            transition: transform 0.6s ease-in-out 0.4s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+        }
+
+        .envelope-open .envelope-paper {
+            transform: translateY(-100px);
+        }
+
+        /* Small Envelope Icon for Intro */
+        .mini-envelope {
+            font-size: 5rem;
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.3));
+            transition: transform 0.3s;
+        }
+        .intro-clickable:active .mini-envelope {
+            transform: scale(0.9) rotate(-10deg);
+        }
+
+        /* Ketupat Decoration */
+        .ketupat {
+            width: 40px; height: 40px;
+            background-color: #84cc16;
+            transform: rotate(45deg);
+            border: 2px solid #3f6212;
+            position: absolute;
+            z-index: 20;
+        }
+        .ketupat::before, .ketupat::after {
+            content: ''; position: absolute; background: rgba(255,255,255,0.3);
+        }
+        .ketupat::before { width: 100%; height: 50%; top: 0; }
+        .ketupat::after { width: 50%; height: 100%; top: 0; }
+
+        /* Transition Screens */
+        .screen {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .hidden-screen {
+            opacity: 0;
+            pointer-events: none;
+            z-index: -1;
+            transform: scale(1.1); /* Zoom effect when hiding */
+        }
+
+        /* Button Style */
+        .btn-raya {
+            background: #ffffff;
+            color: #065f46;
+            font-weight: 600;
+            padding: 12px 30px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 2px solid #fbbf24;
+            cursor: pointer;
+            z-index: 40;
+        }
+        .btn-raya:active { transform: scale(0.95); }
+
+        /* Pattern overlay */
+        .pattern-bg {
+            background-image: radial-gradient(#ffffff 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.1;
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+        }
+
+        /* Confetti */
+        .confetti {
+            position: absolute;
+            width: 10px; height: 10px;
+            background-color: #f00;
+            animation: fall linear forwards;
+            z-index: 100;
+        }
+        @keyframes fall { to { transform: translateY(100vh) rotate(720deg); } }
+
+        /* Name Tag Box */
+        .name-tag {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 10px 20px;
+            text-align: center;
+            width: 100%;
+            margin-bottom: 10px;
+            transition: background 0.3s;
+        }
+
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="/_sdk/element_sdk.js" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="mobile-container"><!-- === AUDIO ELEMENTS === --> <!-- 1. Lagu Raya (Google Drive Link) -->
+   <audio id="rayaSong" loop preload="auto"><source src="https://drive.google.com/uc?export=download&amp;id=1e6q0ylnQKcKP_4GplX2lf3Tic9oDDkNk" type="audio/mpeg">
+   </audio><!-- 2. SFX: Butang Click -->
+   <audio id="sfxClick" preload="auto"><source src="https://assets.mixkit.co/sfx/preview/mixkit-modern-technology-select-3124.mp3" type="audio/mpeg">
+   </audio><!-- 3. SFX: Sampul Buka -->
+   <audio id="sfxOpen" preload="auto"><source src="https://assets.mixkit.co/sfx/preview/mixkit-paper-slide-1530.mp3" type="audio/mpeg">
+   </audio><!-- Background Decor -->
+   <div class="pattern-bg"></div>
+   <div id="stars-container"></div>
+   <div class="absolute top-10 right-8 text-yellow-300 text-6xl float opacity-80 z-0">
+    🌙
+   </div><!-- === SKRIN 0: INTRO PAGE (New) === -->
+   <div id="intro-screen" class="screen z-40 cursor-pointer intro-clickable" onclick="goToLanding()">
+    <div class="mb-6 pulse-attention relative">
+     <div class="mini-envelope">
+      💌
+     </div><!-- Sparkles -->
+     <div class="absolute -top-2 -right-4 text-2xl animate-pulse">
+      ✨
+     </div>
+     <div class="absolute -bottom-2 -left-4 text-xl animate-pulse" style="animation-delay: 0.5s">
+      ✨
+     </div>
+    </div>
+    <h1 class="text-white text-2xl font-bold tracking-wide drop-shadow-md">Surat Untuk Kamu</h1>
+    <div class="mt-8 flex flex-col items-center animate-bounce opacity-80">
+     <p class="text-green-200 text-xs mb-1">Tekan untuk buka</p>
+     <div class="w-8 h-8 rounded-full border-2 border-green-200 flex items-center justify-center"><span class="text-green-200 text-xl">👇</span>
+     </div>
+    </div>
+   </div><!-- === SKRIN 1: LANDING PAGE (Detail Pengirim) === -->
+   <div id="landing-screen" class="screen hidden-screen z-30">
+    <div class="text-center mb-8 relative z-10">
+     <h1 class="text-white text-3xl font-bold mb-2 drop-shadow-md">Kiriman Raya</h1>
+     <p class="text-green-100 text-sm">Istimewa dari hati ❤️</p>
+    </div><!-- Sampul Surat Besar -->
+    <div class="envelope-container mb-10 float" onclick="openEnvelope()">
+     <div class="envelope-flap" id="flap"></div>
+     <div class="envelope-paper"><span class="text-emerald-600 text-3xl">❤️</span>
+     </div>
+     <div class="envelope-body flex flex-col items-center justify-center">
+      <div class="text-white text-4xl mt-2">
+       ✉️
+      </div>
+     </div>
+     <div class="ketupat" style="right: -10px; top: 80px; transform: rotate(15deg) scale(0.6);"></div>
+    </div><!-- NAMA DISPLAY -->
+    <div class="w-full max-w-xs space-y-4 mb-10 relative z-30 px-4">
+     <div class="name-tag"><span class="text-green-100 text-xs block mb-1 opacity-80 uppercase tracking-widest">Daripada</span>
+      <div class="text-2xl font-bold bounce-name">
+       Fikrie
+      </div>
+     </div>
+     <div class="name-tag"><span class="text-green-100 text-xs block mb-1 opacity-80 uppercase tracking-widest">Untuk</span>
+      <div class="text-2xl font-bold bounce-name delay">
+       Wana 🌸
+      </div>
+     </div>
+    </div><button onclick="openEnvelope()" class="btn-raya text-lg shadow-lg relative z-30 hover:bg-green-50"> Baca Surat Sekarang </button>
+   </div><!-- === SKRIN 2: KAD UCAPAN (Isi Surat) === -->
+   <div id="card-screen" class="screen hidden-screen z-20 bg-black/20 backdrop-blur-sm">
+    <div class="absolute top-0 left-6 w-1 h-32 bg-yellow-300/50">
+     <div class="ketupat" style="bottom: -20px; left: -18px; border-color: white;"></div>
+    </div>
+    <div class="absolute top-0 right-6 w-1 h-40 bg-yellow-300/50">
+     <div class="ketupat" style="bottom: -20px; left: -18px; border-color: white; background-color: #facc15;"></div>
+    </div>
+    <div class="bg-white rounded-3xl p-6 w-11/12 max-w-sm shadow-2xl relative text-center transform transition-all duration-700 scale-90 mt-10" id="message-card">
+     <div class="w-16 h-16 bg-green-100 rounded-full mx-auto flex items-center justify-center text-3xl mb-3 shadow-inner -mt-10 border-4 border-white">
+      🕌
+     </div>
+     <h2 class="text-2xl font-bold text-green-800 mb-1">Selamat Hari Raya!</h2>
+     <p class="text-xs text-green-600 font-semibold mb-4">Maaf Zahir &amp; Batin</p>
+     <div class="bg-green-50 rounded-xl p-4 mb-4 border border-green-100 relative overflow-hidden text-left"><span class="absolute top-0 right-2 text-6xl text-green-200 opacity-30 select-none">"</span>
+      <p class="text-gray-700 text-sm leading-relaxed relative z-10">Ke hadapan <span class="font-bold text-green-700 text-lg">Wana</span>,<br><br>
+        Di hari yang mulia ini, saya menyusun sepuluh jari memohon ampun dan maaf atas segala salah silap.<br><br>
+        Semoga raya tahun ini membawa seribu keberkatan buat Wana sekeluarga! <br><br><span class="text-xs text-gray-400 italic block text-center mt-2">-- Jangan lupa makan ketupat tu! 😉 --</span></p>
+     </div>
+     <div class="flex items-center justify-center space-x-2 text-sm text-gray-500 mb-4"><span>Ikhlas daripada,</span> <span class="font-bold text-green-700 text-lg">Fikrie</span>
+     </div><button onclick="closeCard()" class="py-2 px-6 rounded-full bg-gray-100 text-gray-600 text-xs font-bold hover:bg-gray-200 transition"> Tutup </button>
+    </div>
+    <div id="fireworks" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
+   </div>
+  </div><!-- JAVASCRIPT LOGIC -->
+  <script>
+        // 1. Generate Stars
+        const starsContainer = document.getElementById('stars-container');
+        for(let i=0; i<30; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
+            const size = Math.random() * 3 + 1;
+            const delay = Math.random() * 2;
+            star.style.left = `${x}%`;
+            star.style.top = `${y}%`;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.animationDelay = `${delay}s`;
+            starsContainer.appendChild(star);
+        }
+
+        // 2. Audio Setup
+        const audio = document.getElementById('rayaSong');
+        const sfxClick = document.getElementById('sfxClick');
+        const sfxOpen = document.getElementById('sfxOpen');
+
+        audio.volume = 0.5; 
+        sfxClick.volume = 0.8; 
+        sfxOpen.volume = 1.0; 
+
+        function playMusic() {
+            if(audio.readyState >= 2) {
+                 audio.play().catch(e => console.log("Lagu tak dapat play:", e));
+            } else {
+                audio.load(); 
+                audio.play().catch(e => console.log("Lagu tak dapat play:", e));
+            }
+        }
+
+        function playSFX(type) {
+            let sound;
+            if (type === 'click') sound = sfxClick;
+            else if (type === 'open') sound = sfxOpen;
+            
+            if(sound) {
+                sound.currentTime = 0;
+                sound.play().catch(e => console.log("SFX Error:", e));
+            }
+        }
+
+        // 3. New Logic: Intro Screen -> Landing Screen
+        function goToLanding() {
+            // Trigger Audio on first interaction!
+            playSFX('click');
+            playMusic();
+
+            const intro = document.getElementById('intro-screen');
+            const landing = document.getElementById('landing-screen');
+
+            // Hide Intro
+            intro.style.opacity = '0';
+            intro.style.transform = 'scale(1.1)'; // Zoom out effect
+
+            // Show Landing after transition
+            setTimeout(() => {
+                intro.classList.add('hidden-screen');
+                landing.classList.remove('hidden-screen');
+                
+                // Slight delay for smooth fade in
+                setTimeout(() => {
+                    landing.style.opacity = '1';
+                    landing.style.transform = 'scale(1)';
+                }, 50);
+            }, 500);
+        }
+
+        // 4. Open Envelope Logic: Landing -> Card
+        function openEnvelope() {
+            playSFX('click');
+
+            const container = document.querySelector('.envelope-container');
+            
+            setTimeout(() => {
+                playSFX('open'); 
+                container.classList.add('envelope-open');
+            }, 300);
+
+            setTimeout(() => {
+                const landing = document.getElementById('landing-screen');
+                const cardScreen = document.getElementById('card-screen');
+                const messageCard = document.getElementById('message-card');
+
+                landing.style.opacity = '0';
+                cardScreen.classList.remove('hidden-screen');
+                
+                setTimeout(() => {
+                    cardScreen.style.opacity = '1';
+                    messageCard.style.transform = 'scale(1)';
+                    landing.classList.add('hidden-screen');
+                    createConfetti();
+                }, 100);
+            }, 800);
+        }
+
+        // 5. Close Card Logic
+        function closeCard() {
+            playSFX('click'); 
+
+            const landing = document.getElementById('landing-screen');
+            const cardScreen = document.getElementById('card-screen');
+            const messageCard = document.getElementById('message-card');
+            const container = document.querySelector('.envelope-container');
+
+            cardScreen.style.opacity = '0';
+            messageCard.style.transform = 'scale(0.9)';
+
+            setTimeout(() => {
+                cardScreen.classList.add('hidden-screen');
+                landing.classList.remove('hidden-screen');
+                
+                setTimeout(() => {
+                    landing.style.opacity = '1';
+                    landing.style.transform = 'scale(1)';
+                    container.classList.remove('envelope-open');
+                }, 50);
+            }, 500);
+        }
+
+        // 6. Confetti
+        function createConfetti() {
+            const colors = ['#fcd34d', '#4ade80', '#ffffff', '#fbbf24'];
+            const container = document.getElementById('fireworks');
+            container.innerHTML = ''; 
+
+            for(let i=0; i<60; i++) {
+                const conf = document.createElement('div');
+                conf.classList.add('confetti');
+                const left = Math.random() * 100;
+                const animDuration = Math.random() * 3 + 2;
+                const bg = colors[Math.floor(Math.random() * colors.length)];
+                const size = Math.random() * 8 + 4;
+                
+                conf.style.left = `${left}%`;
+                conf.style.backgroundColor = bg;
+                conf.style.width = `${size}px`;
+                conf.style.height = `${size}px`;
+                conf.style.animationDuration = `${animDuration}s`;
+                conf.style.top = '-20px';
+                container.appendChild(conf);
+            }
+        }
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c5e4b2592e5068e',t:'MTc2OTc0ODA1MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
